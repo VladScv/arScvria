@@ -2,6 +2,7 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    font-size: 10px;
 }
 body {
     width: 100%;
@@ -17,13 +18,10 @@ body {
 .grid-box{
 
     margin: 0 auto;
-    position: absolute;
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
     align-content: flex-start;
-    /*overflow: hidden;*/
-
     border: hotpink solid 1px;
 
 
@@ -31,26 +29,16 @@ body {
 .head-box{
     grid-column-start: 1;
     grid-column-end:   span 3;
-
-    height: 150px;
-
-/*    display: inline;
-    overflow-wrap: normal;
-    overflow: hidden;*/
+    height: 15em  ;
 }
 .head-box>img{
-    height: 150px;
+    height: 15em;
 }
 .display-cube{
 
-    max-width:200px;
+    max-width:100%;
     max-height: 100%;
     margin: 0 0;
-
-
-    /*display: flex;*/
-    /*background-image: url("images/icon.png");*/
-
     border: yellow solid 1px;
 }
 .display-cube>img{
