@@ -14,20 +14,23 @@ export class GridScreen {
 
     createCubes(grid) {
         const cubes = [];
-        do{            console.log("cube num"+cubes.length)
+        do{
             cubes[cubes.length] = new  DisplayCube(grid,cubes);
-        }while(!this.createMustStop(cubes[cubes.length - 1]))
+        }while(this.createMustContinue(cubes[cubes.length - 1]))
         return cubes;
     }
 
 
-    createMustStop(cube) {
+    createMustContinue(cube) {
         if (cube.divCube.getBoundingClientRect().bottom + cube.divCube.getBoundingClientRect().height > window.innerHeight){
+            if(window.innerHeight - cube.divCube.getBoundingClientRect().bottom>100){
+                this.gridEmenent.style.fontSize=this.gridEmenent.style.fontSize-1;
+            }
             if(cube.divCube.getBoundingClientRect().right + (cube.divCube.getBoundingClientRect().width*3) > window.innerWidth){
-                return true;
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     getGridSize() {
