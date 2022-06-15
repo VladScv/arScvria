@@ -16,10 +16,19 @@ export class GridScreen {
         const cubes = [];
         do{            console.log("cube num"+cubes.length)
             cubes[cubes.length] = new  DisplayCube(grid,cubes);
-        }while((cubes[cubes.length-1].divCube.getBoundingClientRect().bottom+200 <= window.innerHeight)||(cubes[cubes.length-1].divCube.getBoundingClientRect().right+600 <= window.innerWidth))
+        }while(!this.createMustStop(cubes[cubes.length - 1]))
         return cubes;
     }
 
+
+    createMustStop(cube) {
+        if (cube.divCube.getBoundingClientRect().bottom + cube.divCube.getBoundingClientRect().height > window.innerHeight){
+            if(cube.divCube.getBoundingClientRect().right + (cube.divCube.getBoundingClientRect().width*3) > window.innerWidth){
+                return true;
+            }
+        }
+        return false;
+    }
 
     getGridSize() {
         return {rows: this.getGridRows(), columns: this.getGridColumns()};
