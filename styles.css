@@ -24,7 +24,8 @@ body {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(15em, 1fr));
-    align-content: flex-start;
+    /*align-content: flex-start;*/
+    font-size: 10px;
 
     /*border: hotpink solid 1px;*/
 

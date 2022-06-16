@@ -1,8 +1,9 @@
 
-import {GridScreen} from "./gridscreen.js";
+import {GridScreen} from "./gridclass.js";
 window.addEventListener("resize",()=>{
+    //TODO avoid multiple trigger while resizing
     document.querySelectorAll('.display-cube').forEach(box => {
-        box.remove();
+         box.remove();//TODO may fail due that actually we are removing it from de DOM?
     });
     grid.createCubes(grid);
 })
