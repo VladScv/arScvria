@@ -1,0 +1,40 @@
+new GridManager(){
+	
+	constructGrid(){
+		createCubes(){
+			while(!stopCubeCreation(lastCube)){
+				new DisplayCube(){
+					calcSizePosition();				
+				}
+				
+			}
+		}
+		calcLayoutDesign(){
+			
+		}
+		
+	}
+	loadContent("home");
+	activateListeners();
+	setAnimations();
+	
+	
+}
+
+resize =>{
+	waitUntilResizeEnd(){
+		if(oldSize>newSize){
+			while(stopCubeCreation){
+				deleteCube(lastCube);
+			}
+		}else if(oldSize<newSize){
+			createCubes();
+		}
+		forEach(cube:cubes) calcSizePosition();
+		calcLayoutDesign();
+		loadContent(currentPage);
+		activateListeners();
+		setAnimations();
+		
+	}
+}

@@ -49,7 +49,7 @@ export class GridScreen {
                 limitReached=true;
                 cubes.splice(i,(cubes.length - i));
                 break;
-            };
+            }
         }
         if (!limitReached){
             do{
@@ -85,16 +85,16 @@ export class DisplayCube{
         this.parentGrid=grid;
         this.parentGrid.gridEmenent.insertAdjacentHTML("beforeend",`<div class="display-cube" id="${this.cubeId}"> <img src="images/icon.png" alt="a Display Cube, press X to accesibility version"> </div>`);
         this.divCube=document.querySelector('#'+this.cubeId);
-        this.divCube.addEventListener("click",()=>{this.scaledResize('3','3')})
+        this.divCube.addEventListener("click",()=>{this.scaledResize('3','3',)})
         this.isActive=false;
 
 
     }
     scaledResize(col, row){
-        this.resizeCube(2,1,true)
-        setTimeout(this.resizeCube(2,2,true),1500);
-        setTimeout(this.resizeCube(3,2,true),11000);
-        setTimeout(this.resizeCube(3,3,true),11500);
+        this.resizeCube(1,1,true)
+        // setTimeout(this.resizeCube(2,2,true),15000);
+        // setTimeout(this.resizeCube(2,2,true),110000);
+        // setTimeout(this.resizeCube(3,3,true),115000);
 
     }
     resizeCube(col,row,force){

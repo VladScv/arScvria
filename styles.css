@@ -12,7 +12,7 @@ body {
     /*border: blue solid 1px;*/
 }
 .main-box{
-    padding: 2em 5em;
+    /*padding: 2em 5em;*/
 
     width: 100%;
     display: grid;
@@ -32,7 +32,7 @@ body {
 
 }
 .head-box{
-    padding: 0.25em;
+    /*padding: 0.25em;*/
     grid-column-start: 1;
     grid-column-end:   span 3;
     height: 15em;
