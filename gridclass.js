@@ -85,7 +85,31 @@ export class DisplayCube{
         this.parentGrid=grid;
         this.parentGrid.gridEmenent.insertAdjacentHTML("beforeend",`<div class="display-cube" id="${this.cubeId}"> <img src="images/icon.png" alt="a Display Cube, press X to accesibility version"> </div>`);
         this.divCube=document.querySelector('#'+this.cubeId);
-        this.divCube.addEventListener("click",()=>{console.log("cubeclicked")})
+        this.divCube.addEventListener("click",()=>{this.scaledResize('3','3')})
+        this.isActive=false;
+
+
     }
-    calculatePosition
+    scaledResize(col, row){
+        this.resizeCube(2,1,true)
+        setTimeout(this.resizeCube(2,2,true),1500);
+        setTimeout(this.resizeCube(3,2,true),11000);
+        setTimeout(this.resizeCube(3,3,true),11500);
+
+    }
+    resizeCube(col,row,force){
+        if(this.isActive&& !force){
+            this.divCube.style.gridColumnEnd = ""
+            this.divCube.style.gridRowEnd = ""
+            this.isActive=false;
+        }else {
+            this.divCube.style.gridColumnEnd = "span "+col;
+            this.divCube.style.gridRowEnd = "span "+row;
+            this.isActive=true;
+        }
+        this.parentGrid.updateCubes(this.parentGrid)
+    }
+    calculateRelPosition(){
+
+    }
 }
