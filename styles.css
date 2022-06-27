@@ -31,6 +31,18 @@ body {
 
 
 }
+.mini-grid{
+    margin: auto auto;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    /*align-content: flex-start;*/
+    font-size: 10px;
+
+    /*border: hotpink solid 1px;*/
+
+}
 .head-box{
     /*padding: 0.25em;*/
     grid-column-start: 1;
@@ -40,7 +52,22 @@ body {
 .head-box>img{
     height: 15em;
 }
-.display-cube{
+.display-cube,.grid-cube{
+    /*padding: 0.25em;*/
+    max-width:100%;
+    max-height: 100%;
+    margin: 0 0;
+    /*border: yellow solid 1px;*/
+}
+.display-cube:hover>img,.mini-display:hover>img{
+
+    padding: 0.8em;
+}
+.display-cube:active>img{
+    margin: -1em;
+}
+
+.mini-cube{
     padding: 0.25em;
     max-width:100%;
     max-height: 100%;
