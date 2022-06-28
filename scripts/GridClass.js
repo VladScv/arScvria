@@ -1,38 +1,95 @@
-
+import {Content} from "./ContentClass.js";
 //======================================================================================================================
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   GRID-SCREEN CLASS   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //======================================================================================================================
 export class GridScreen {
-    cubeSize=150;
-    listeners= [];
-    cubes=[]
-    width;
-    height;
-    titleSize= 3;
+    static get MODAL(){
+        return{}
+    }
+    static get HOME(){
+        return{
+            title:"Home",
+            buttons: [{name:"About",type:"new_content",ref:"about_"},{name: "Gallery",type:"new_content",ref: "gallery_"}]
 
-    constructor(width,height) {
-        this.idCounter= 0;
-        this.gridEmenent = document.querySelector(".grid-box");
+        }
+    }
+    #cubeSize=150;
+    #listeners= [];
+    #cubes=[];
+    #width;
+    #height;
+    #titleSize= 3;
+    #idCounter
+    #gridElement;
+    #content;
+
+    constructor() {
+        this.#idCounter= 0;
+        this.gridElement=".grid-box";
         this.calculateSizes();
-        this.cubes = this.createCubes(this);
+        this.#cubes = this.createCubes(this);
         this.gridColumns = this.getGridColumns();
         this.gridRows = this.getGridRows();
-        this.activateListeners(this.listeners);
+        this.activateListeners(this.#listeners);
+    }
+    get width() {
+        return this.calculateSizes().width;
+    }
+    get height() {
+        return this.calculateSizes().height;
+    }
+    get gridElement() {
+        return this.#gridElement;
+    }
+    set gridElement(selector) {
+        this.#gridElement =document.querySelector(selector)
     }
 
+    get gridColumns() {
+        return this._gridColumns;
+    }
+
+    set gridColumns(value) {
+        this._gridColumns = value;
+    }
+
+    get gridRows() {
+        return this._gridRows;
+    }
+
+    set gridRows(value) {
+        this._gridRows = value;
+    }
+
+    get cubes() {return this.#cubes;}
+    set cubes(cube) {this.#cubes.add(cube);}
+    get cubeSize() {return this.#cubeSize; }
+    set cubeSize(value) {this.#cubeSize = value;}
+    get listeners(){ return this.#listeners;  }
+    get titleSize(){
+        return this.#titleSize;
+    }
+    set titleSize(cubes) {
+        this.#titleSize = cubes;
+    }
+    get idCounter(){
+        this.#idCounter++;
+        return this.#idCounter;
+    }
+
+    checkCubesIntegrity(width,height){
+        let num= Math.trunc((width/this.cubeSize)*(height/this.cubeSize))-3;
+        if(this.cubes.length>num)this.updateCubes(false);
+        else if(this.cubes.length<num)this.updateCubes(true);
+    }
     calculateSizes() {
-        this.width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        this.height = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-        return {width:this.width,height:this.height};
-    }
-
-    get getIdCounter(){
-        this.idCounter++;
-        return this.idCounter;
+        this.#width = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+        this.#height = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+        return {width:this.#width,height:this.#height};
     }
     createCubes(grid) {
         const cubes = []
-        let num=(Math.trunc(this.height/this.cubeSize)*Math.trunc(this.width/this.cubeSize))-this.titleSize;
+        let num=(Math.trunc(this.height/this.#cubeSize)*Math.trunc(this.width/this.#cubeSize))-this.titleSize;
         console.log(this.height+" X "+this.width+"="+num)
         for(num;num>0;num--){
             cubes[cubes.length] = new  DisplayCube(grid);
@@ -40,13 +97,18 @@ export class GridScreen {
         return cubes;
     }
     updateCubes(increase){
-        let num = (Math.trunc(this.height / this.cubeSize) * Math.trunc(this.width / this.cubeSize)) - this.titleSize;
+        let num = (Math.trunc(this.height / this.#cubeSize) * Math.trunc(this.width / this.#cubeSize)) - this.titleSize;
+        console.log(this.height + " X " + this.width + "=" + num)
         if(increase){
             num -= this.cubes.length;
+            let cube;
             for (let i = 0; i < num; i++) {
-                this.cubes.push(new DisplayCube(this))
+                cube=(new DisplayCube(this)).integrityCheck()
+                if(cube!==null) this.cubes.push(cube);
+
+                else {
+                }
             }
-            console.log(this.height + " X " + this.width + "=" + this.cubes.length)
         }else{
             num= this.cubes.length-num;
             for (let i = 0; i< num; i++) {
@@ -54,33 +116,23 @@ export class GridScreen {
             }
             console.log(this.height + " X " + this.width + "=" + this.cubes.length)
         }
+        return this.cubes;
     }
     deleteRandomCubes(num){
         for (let i = 0; i < num; i++) {
             this.cubes.pop().delete();
         }
     }
-    createMustContinue(cube) {
-        if (cube.boundingSize.bottom + cube.boundingSize.height > window.innerHeight){
-            if(window.innerHeight - cube.boundingSize.bottom>120) {
 
-            }
-            if(cube.boundingSize.right + (cube.boundingSize.width) > window.innerWidth){
-                return false;
-            }
-        }
-        return true;
-    }
     getGridSize() {
         return {rows: this.getGridRows(), columns: this.getGridColumns()};
     }
     getGridRows() {
-        return window.getComputedStyle(this.gridEmenent).getPropertyValue("grid-template-rows").split(" ").length;
+        return window.getComputedStyle(this.gridElement).getPropertyValue("grid-template-rows").split(" ").length;
     }
     getGridColumns() {
         return window.getComputedStyle(document.querySelector(".grid-box")).getPropertyValue("grid-template-columns").split(" ").length;
     }
-
     loadContent(sectionName) {
         //TODO
         return this;
@@ -113,12 +165,11 @@ class Cube{
         this.#parentGrid=grid;
         this.#cubeId = id+"_"+String(Date.now()).slice(-6);
         html=html.replace("$$ID$$",this.#cubeId)
-        this.#parentGrid.gridEmenent.insertAdjacentHTML("beforeend",html);
+        this.#parentGrid.gridElement.insertAdjacentHTML("beforeend",html);
         this.#divCube=document.querySelector('#'+this.#cubeId);
         this.#boundingSize=this.#divCube.getBoundingClientRect();
     }
     //-----------------------------------------------------------------------Getters&Setters
-
     get parentGrid() {
         return this.#parentGrid;
     }
@@ -132,6 +183,7 @@ class Cube{
         return this.#divCube;
     }
     //-----------------------------------------------------------------------METHODS
+
 //---------------------------------VIEWPORT
 
     checkViewport(){ //Returns 1 if Cube is full on screen, 0 if only partialy, -1 when it's all out screen
@@ -152,8 +204,6 @@ class Cube{
     isOnScreen(screenSize) {
         return this.boundingSize.x < screenSize.width && this.boundingSize.y < screenSize.height;
      }
-
-
     calcSizePosition(){
 
     }
@@ -161,16 +211,20 @@ class Cube{
         this.divCube.innerHTML=this instanceof DisplayCube?GridCube.HTML: DisplayCube.HTML
         //TODO instatiate new cube object and put it in the original list position
     }
+    applyLayout(){
+        //todo aply responsive type based on layout
+    }
 }
 //======================================================================================================================
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   DISPLAY-CUBE CLASS   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //======================================================================================================================
 export class DisplayCube extends Cube{
-    static get HTML(){return `<div class="display-cube" id="$$ID$$"> <img src="../images/icon.png" alt="a Display Cube, press X to accesibility version"> </div>`}
+    static get HTML(){return `<div class="display-cube" id="$$ID$$"><img src="$$IMG$$" alt="a Display Cube, press X to accesibility version"></div>`}
+    static get IMG_STD(){return `../images/icon.png`}
     static get TYPE(){return ["button","grow","mask","display"]}
     #type
     constructor(grid) {
-        super(grid,"DC"+grid.getIdCounter,DisplayCube.HTML);
+        super(grid,"DC"+grid.idCounter,DisplayCube.HTML.replace("$$IMG$$",DisplayCube.IMG_STD));
     }
     //-----------------------------------------------------------------------Getters&Setters
     get type() {
@@ -182,19 +236,19 @@ export class DisplayCube extends Cube{
     set type(index) {
         if(index<DisplayCube.TYPE.length-1)this.#type = DisplayCube.TYPE[index];
     }
-
     //-----------------------------------------------------------------------METHODS
     scaledResize(col, row){
-        console.log(this.parentGrid.width)
         this.resizeCube(col,row,false)
     }
     resizeCube(col,row,force){
         if(this.isActive&& !force){
+            this.divCube.classList.remove("glitch");
             this.divCube.style.gridColumnEnd = ""
             this.divCube.style.gridRowEnd = ""
             this.isActive=false;
             this.parentGrid.updateCubes(true)
         }else {
+            this.divCube.classList.add("glitch")
             this.divCube.style.gridColumnEnd = "span "+col ;
             this.divCube.style.gridRowEnd = "span " + row;
             this.parentGrid.deleteRandomCubes((col*row)-1);
@@ -215,7 +269,7 @@ export class DisplayCube extends Cube{
             case "display":
                 break;
             default:
-                fnListener = ()=>{this.scaledResize('3','3',)};
+                fnListener = ()=>{this.scaledResize('2','2',)};
                 // fnListener = ()=>{this.delete();}
                 break;
         }
@@ -231,18 +285,27 @@ export class DisplayCube extends Cube{
         this.parentGrid.deleteCubeFromGrid(cube);
         // console.log("AFTER cubes:"+cube.parentGrid.cubes.length)
     }
+    integrityCheck(){
+        switch (this.checkViewport()){
+            case -1:
+                this.delete();
+                return null;
+            case 0:
+            case 1:
+                return this;
+        }
+    }
 }
 //======================================================================================================================
 //XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX   GRID-CUBE CLASS   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 //======================================================================================================================
 export class GridCube extends Cube{
     static get HTML(){return `<div class="grid-cube" id="$$ID$$"> </div>`;}
-
     //TODO special cube that contains 4 MiniDisplays, it uses .mini-grid style
     #miniCubes=[] ;
     #childNum
     constructor(grid,child) {
-        super(grid,"GC"+grid.getIdCounter,GridCube.HTML);
+        super(grid,"GC"+grid.idCounter,GridCube.HTML);
         this.#childNum=child;
         this.#miniCubes=this.createMiniCubes(child);
     }
@@ -251,7 +314,6 @@ export class GridCube extends Cube{
             this.#miniCubes[i].delete();
         }
     }
-
     createMiniCubes(child){
         const miniCubes=[];
         for (let i=0;i<child;i++){
