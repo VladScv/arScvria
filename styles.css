@@ -85,6 +85,8 @@ body {
 .footer{
    overflow: hidden;
     width: 100%;
+    text-align: center;
+    alignment: center;
     /*height: calc(var(--cube-size)/2);*/
     /*margin: 10px 0 0 0 ;*/
     /*perspective: 10px;*/
@@ -99,10 +101,11 @@ body {
 .background{
     opacity: 0.5;
     margin-top: 10px;
+    margin-left: 10%;
     position: absolute;
     display: compact;
     background: #293c3d;
-    width:100%;
+    width:80%;
     height: 60px;
     transform: perspective(120px)rotateX(45deg);
 }
